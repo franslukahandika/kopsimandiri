@@ -1,0 +1,7 @@
+{
+  "name": "SI MANDIRI - Koperasi Digital Ecosystem",
+  "description": "Enterprise-grade digital ecosystem for Koperasi Syarikat Islam Mandiri, featuring role-based management, transaction tracking, and national-scale cooperative governance.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

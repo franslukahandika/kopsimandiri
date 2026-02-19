@@ -1,0 +1,115 @@
+
+// This is the production-ready schema for Prisma ORM (Next.js context)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  DIRECTOR
+  ANGGOTA
+}
+
+enum TransactionType {
+  MASUK
+  KELUAR
+}
+
+enum ReferalType {
+  KOPERASI
+  PROJECT
+}
+
+model User {
+  id            String    @id @default(uuid())
+  username      String    @unique
+  password      String
+  name          String
+  role          Role      @default(ANGGOTA)
+  plantation    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  deletedAt     DateTime?
+  
+  // Relations
+  members       Member[]
+  transactions  Transaction[] @relation("Recorder")
+  logs          AuditLog[]
+}
+
+model Member {
+  id               String    @id @default(uuid())
+  memberId         String    @unique // e.g., M23-0001
+  userId           String?   @unique
+  user             User?     @relation(fields: [userId], references: [id])
+  name             String
+  registrationDate DateTime  @default(now())
+  gender           String
+  province         String
+  city             String
+  address          String    @db.Text
+  occupation       String
+  plantation       String
+  areaType         String    // PUSAT or CABANG
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+}
+
+model Transaction {
+  id            String          @id @default(uuid())
+  transactionId String          @unique // P240201002
+  date          DateTime
+  referal       ReferalType
+  entity        String
+  type          TransactionType
+  category      String
+  amount        Decimal         @db.Decimal(15, 2)
+  qty           Int             @default(0)
+  product       String?
+  account       String?         // Member name/ID if applicable
+  description   String?         @db.Text
+  recordedById  String
+  recordedBy    User            @relation("Recorder", fields: [recordedById], references: [id])
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  deletedAt     DateTime?
+  
+  files         TransactionFile[]
+}
+
+model TransactionFile {
+  id            String      @id @default(uuid())
+  transactionId String
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  fileUrl       String
+  fileName      String
+  mimeType      String
+  createdAt     DateTime    @default(now())
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  action      String
+  category    String   // AUTH, TRANSACTION, MEMBER
+  metadata    Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime @default(now())
+}
+
+model MasterArea {
+  id        String   @id @default(uuid())
+  code      String   @unique
+  name      String
+  type      String
+  createdAt DateTime @default(now())
+}
