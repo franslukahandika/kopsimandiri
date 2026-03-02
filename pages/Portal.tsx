@@ -293,9 +293,9 @@ const Portal: React.FC<PortalProps> = ({ onLoginClick, currentPage, setCurrentPa
           <div>
             <h5 className="font-bold mb-6 border-b border-white/10 pb-2 inline-block">Kontak Kami</h5>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Gedung Syarikat Islam Lt. 4<br />
-              Jl. Kramat Raya No. 164<br />
-              Jakarta Pusat, 10430
+              Gedung Tempo Scan Tower Lt. 32<br />
+              Jl. H. R. Rasuna Said, Kuningan Tim., Kecamatan Setiabudi<br />
+              Jakarta Selatan, 12950
             </p>
           </div>
         </div>
